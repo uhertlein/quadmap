@@ -2,7 +2,7 @@
 
 This repository reverse-engineers the SeeYou `qmp` file format.
 
-- [ ] The minimum goal is to extract images from a given `qmp` file.
+- [x] The minimum goal is to extract images from a given `qmp` file.
 - [ ] The stretch goal is to create `qmp` files that will be accepted by SeeYou.
 
 ## QMP File Format

@@ -58,7 +58,7 @@ struct Tile {
     uint32_t tile_x;
     uint32_t tile_y;
 
-    // JFIF SOI offset, length
+    // JFIF SOI offset+1, length
     uint32_t soi_offset;
     uint32_t soi_length;
 

@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <string>
+#include <vector>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +30,33 @@ std::string extract(const char* data, const size_t data_size)
 {
     return trim(std::string(data, data_size));
 }
+
+void extract_jfif(const char* input_path, const std::string& input_name, const qmp::Tile& tile)
+{
+    FILE* in = fopen(input_path, "rb");
+    if (in) {
+        char out_path[256];
+        snprintf(out_path, sizeof(out_path), "%s_%u_%u_%u.jpg", input_name.c_str(), tile.level, tile.tile_x, tile.tile_y);
+
+        FILE* out = fopen(out_path, "wb");
+        if (out) {
+            std::vector<uint8_t> buffer;
+            buffer.resize(tile.soi_length);
+
+            fseek(in, tile.soi_offset - 1, SEEK_SET);
+            fread(&buffer[0], buffer.size(), 1, in);
+
+            fwrite(&buffer[0], buffer.size(), 1, out);
+            fclose(out);
+        } else {
+            printf("Failed to open output='%s'\n", out_path);
+        }
+
+        fclose(in);
+    } else {
+        printf("Failed to open input='%s'\n", input_path);
+    }
+}
 }
 
 int main(int argc, char** argv)
@@ -38,9 +66,10 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    FILE* fp = fopen(argv[1], "r");
+    const char* input_path = argv[1];
+    FILE* fp = fopen(input_path, "rb");
     if (!fp) {
-        printf("Failed to open '%s'\n", argv[1]);
+        printf("Failed to open '%s'\n", input_path);
         return -1;
     }
 
@@ -52,12 +81,14 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    auto input_description = extract(qtmap.description, sizeof(qtmap.description));
+    auto input_name = extract(qtmap.name, sizeof(qtmap.name));
+
     printf("QTMAP\n");
     printf(" version=%d\n", qtmap.version);
     printf(" quadtree_offset=0x%08x\n", qtmap.quadtree_offset);
-    printf(" description='%s'\n",
-        extract(qtmap.description, sizeof(qtmap.description)).c_str());
-    printf(" name='%s'\n", extract(qtmap.name, sizeof(qtmap.name)).c_str());
+    printf(" description='%s'\n", input_description.c_str());
+    printf(" name='%s'\n", input_name.c_str());
     printf(" date0='%s'\n", extract(qtmap.date0, sizeof(qtmap.date0)).c_str());
     printf(" date1='%s'\n", extract(qtmap.date1, sizeof(qtmap.date1)).c_str());
 
@@ -103,6 +134,8 @@ int main(int argc, char** argv)
             printf("   soi_length=0x%08x\n", tile.soi_length);
             printf("   top_left=%u,%u\n", tile.x0, tile.y0);
             printf("   bottom_right=%u,%u\n", tile.x1, tile.y1);
+
+            //extract_jfif(input_path, input_name, tile);
         }
     }
 
