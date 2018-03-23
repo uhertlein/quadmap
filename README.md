@@ -2,13 +2,14 @@
 
 This repository reverse-engineers the SeeYou `qmp` file format.
 
-The minimum goal is to extract images from a given `qmp` file.  The stretch goal is to create `qmp` files that will be accepted by SeeYou.
+- [ ] The minimum goal is to extract images from a given `qmp` file.
+- [ ] The stretch goal is to create `qmp` files that will be accepted by SeeYou.
 
 ## QMP File Format
 
 - QTMAP
   - at `0x000000`, end `0x0009c5`, len `0x9c5`
-    - char marker[5]
+    - char marker[5] = 'QTMAP' // not null-terminated
     - uint32_t version = 0x02
     - uint32_t quadtree_offset? = 0x0000 09c6 // off-by-one?
     - char description[0x64] // not null-terminated
@@ -29,7 +30,7 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
     - char copyright[0x64] // not null-terminated
 - QUADTREE
   - at `0x0009c5`, end `0x00df8`, len `0x434`
-    - char marker[8]
+    - char marker[8] = 'QUADTREE' // not null-terminated
     - uint32_t version = 0x01
     - uint32_t max_level = 0x04
     - uint32_t unk = 0x2000 
@@ -44,6 +45,7 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
   - at `0x0009f5` rel `0x30`: `0x000040aa`
 - TILESET
   - total count 5
+    - char marker[8] = 'TILESET ' // not null-terminated
   - level 0, 1x1=1
     - at `0x000df9`, end `0x000ea8`, length=`0xb0`
     - at `0x000e91` rel `0x98`: `0x000040aa`=SOI `0x00002689`=length
