@@ -1,4 +1,10 @@
-# QMP File Format
+# QuadMap
+
+This repository aims to analyse the SeeYou `qmp` file format.
+
+The minimum goal is to extract images from a given `qmp` file.  The stretch goal is to create `gmp` files that will be accepted by SeeYou.
+
+## QMP File Format
 
 - QTMAP
   - at `0x000000`, end `0x0009c4`, len `0x9c4`
@@ -115,4 +121,3 @@
   - at `0x015f81` -> SOI header
   - at `0x017832` -> SOI header
   - at `0x018cf1` -> SOI header
-
