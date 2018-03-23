@@ -20,27 +20,28 @@ struct QtMap {
     char name[0x64];
     char date0[0x14];
     char date1[0x14];
-    uint8_t unk[0x28];
-    char copyright0[0x32];
-    char copyright1[0x64];
-    uint8_t unk_rem[0x80a];
+    uint32_t unk_a[0xa];
+    char creator[0x32];
+    char copyright[0x64];
+    uint32_t unk_b[0x8];
+    uint8_t unk_zero[0x7ea];
 };
 static_assert(sizeof(QtMap) == 0x9c5, "Invalid QtMap size");
 
 struct QuadTree {
     char marker[8]; // 'QUADTREE'
-    uint32_t version;
-    uint32_t max_level;
-    uint32_t unk0; // 0x0000 2000
-    uint32_t unk1; // 0x0000 1000
+    uint32_t version; // 0x0000 0001 = 1
+    uint32_t max_level; // 0x0000 0004 = 4
+    uint32_t unk0; // 0x0000 2000 = 8192
+    uint32_t unk1; // 0x0000 1000 = 4096
     uint32_t unk2; // 0x0000 2000
     uint32_t unk3; // 0x0000 1000
-    uint32_t unk4; // 0x0000 02
-    uint32_t unk5; // 0x0000
-    uint32_t unk6; // 0x0
-    uint32_t unk7; // 0x0
+    uint32_t unk4; // 0x0000 0200 = 512
+    uint32_t unk5; // 0x0000 0100 = 256
+    uint32_t unk6; // 0x0000 0000
+    uint32_t unk7; // 0x0000 0000
     uint32_t soi_preview_offset; // 0x0000 40aa
-    uint8_t unk_rem[0x400];
+    uint8_t unk_zero[0x400];
 };
 static_assert(sizeof(QuadTree) == 0x434, "Invalid QuadTree size");
 
@@ -48,7 +49,7 @@ struct TileSet {
     char marker[8]; // 'TILESET '
     uint32_t version;
     uint32_t level;
-    uint8_t unk_rem[0x7c];
+    uint8_t unk_zero[0x7c];
 };
 static_assert(sizeof(TileSet) == 0x8c, "Invalid TileSet size");
 

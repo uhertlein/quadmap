@@ -54,16 +54,17 @@ int main(int argc, char** argv)
 
     printf("QTMAP\n");
     printf(" version=%d\n", qtmap.version);
-    printf(" quadtree_offset=0x%04x\n", qtmap.quadtree_offset);
+    printf(" quadtree_offset=0x%08x\n", qtmap.quadtree_offset);
     printf(" description='%s'\n",
         extract(qtmap.description, sizeof(qtmap.description)).c_str());
     printf(" name='%s'\n", extract(qtmap.name, sizeof(qtmap.name)).c_str());
     printf(" date0='%s'\n", extract(qtmap.date0, sizeof(qtmap.date0)).c_str());
     printf(" date1='%s'\n", extract(qtmap.date1, sizeof(qtmap.date1)).c_str());
-    printf(" copyright0='%s'\n",
-        extract(qtmap.copyright0, sizeof(qtmap.copyright0)).c_str());
-    printf(" copyright1='%s'\n",
-        extract(qtmap.copyright1, sizeof(qtmap.copyright1)).c_str());
+
+    printf(" creator='%s'\n",
+        extract(qtmap.creator, sizeof(qtmap.creator)).c_str());
+    printf(" copyright='%s'\n",
+        extract(qtmap.copyright, sizeof(qtmap.copyright)).c_str());
 
     qmp::QuadTree quadtree;
     fread(&quadtree, sizeof(quadtree), 1, fp);
@@ -76,6 +77,7 @@ int main(int argc, char** argv)
     printf("QUADTREE\n");
     printf(" version=%d\n", quadtree.version);
     printf(" max_level=%d\n", quadtree.max_level);
+    printf(" soi_preview_offset=0x%08x\n", quadtree.soi_preview_offset);
 
     for (uint32_t level = 0; level < quadtree.max_level; ++level) {
         qmp::TileSet tileset;
@@ -97,8 +99,8 @@ int main(int argc, char** argv)
             printf("  TILE_%u_%u\n", level, i);
             printf("   level=%u\n", tile.level);
             printf("   tile=%u,%u\n", tile.tile_x, tile.tile_y);
-            printf("   soi_offset=0x%04x\n", tile.soi_offset);
-            printf("   soi_length=0x%04x\n", tile.soi_length);
+            printf("   soi_offset=0x%08x\n", tile.soi_offset);
+            printf("   soi_length=0x%08x\n", tile.soi_length);
             printf("   top_left=%u,%u\n", tile.x0, tile.y0);
             printf("   bottom_right=%u,%u\n", tile.x1, tile.y1);
         }

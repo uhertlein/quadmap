@@ -15,9 +15,18 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
     - char name[0x64] // not null-terminated
     - char date0[0x14] // not null-terminated
     - char date1[0x14] // not null-terminated
-    - uint8_t unk[0x28]
-    - char copyright0[0x32] // not null-terminated
-    - char copyright1[0x64] // not null-terminated
+    - uint32_t unk_a0 = 0x05a0 0000
+    - uint32_t unk_a1 = 0x4113 c0e0
+    - uint32_t unk_a2 = 0xf4c0 0000
+    - uint32_t unk_a3 = 0xc123 c3af
+    - uint32_t unk_a4 = 0x0000 2000 = 8192
+    - uint32_t unk_a5 = 0x0000 1000 = 4096
+    - uint32_t unk_a6 = 0xf4c0 0000
+    - uint32_t unk_a7 = 0x4063 c3af
+    - uint32_t unk_a8 = 0x21c0 0000
+    - uint32_t unk_a9 = 0x4063 c0e0
+    - char creator[0x32] // not null-terminated
+    - char copyright[0x64] // not null-terminated
 - QUADTREE
   - at `0x0009c5`, end `0x00df8`, len `0x434`
     - char marker[8]
