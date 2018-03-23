@@ -1,2 +1,4 @@
 world.qmp
 world.qmp.txt
+build-*
+CMakeLists.txt.user
