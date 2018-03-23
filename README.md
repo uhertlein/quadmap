@@ -1,6 +1,6 @@
 # QuadMap
 
-This repository aims to analyse the SeeYou `qmp` file format.
+This repository reverse-engineers the SeeYou `qmp` file format.
 
 The minimum goal is to extract images from a given `qmp` file.  The stretch goal is to create `qmp` files that will be accepted by SeeYou.
 
