@@ -7,7 +7,17 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
 ## QMP File Format
 
 - QTMAP
-  - at `0x000000`, end `0x0009c4`, len `0x9c4`
+  - at `0x000000`, end `0x0009c5`, len `0x9c5`
+    - char marker[5]
+    - uint32_t version = 0x02
+    - uint32_t quadtree_offset? = 0x0000 09c6 // off-by-one?
+    - char description[0x64] // not null-terminated
+    - char name[0x64] // not null-terminated
+    - char date0[0x14] // not null-terminated
+    - char date1[0x14] // not null-terminated
+    - uint8_t unk[0x28]
+    - char copyright0[0x32] // not null-terminated
+    - char copyright1[0x64] // not null-terminated
 - QUADTREE
   - at `0x0009c5`, end `0x00df8`, len `0x434`
     - char marker[8]
@@ -21,10 +31,10 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
     - uint32_t unk = 0x0100
     - uint32_t unk = 0x0
     - uint32_t unk = 0x0
-    - uint32_t preview? = 0x0000 40aa
+    - uint32_t soi_preview_offset? = 0x0000 40aa
   - at `0x0009f5` rel `0x30`: `0x000040aa`
 - TILESET
-  - count 5
+  - total count 5
   - level 0, 1x1=1
     - at `0x000df9`, end `0x000ea8`, length=`0xb0`
     - at `0x000e91` rel `0x98`: `0x000040aa`=SOI `0x00002689`=length
@@ -32,8 +42,8 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
       - uint32_t level = 0x0000 0000
       - uint32_t tile_x = 0x0000 0001
       - uint32_t tile_y = 0x0000 0001
-      - uint32_t offset_soi = 0x0000 40aa
-      - uint32_t length_soi = 0x0000 2689
+      - uint32_t soi_offset = 0x0000 40aa
+      - uint32_t soi_length = 0x0000 2689
       - uint32_t x0 = 0x0000 0000 = 0
       - uint32_t y0 = 0x0000 0000 = 0
       - uint32_t x1 = 0x0000 01ff = 511
@@ -45,8 +55,8 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
       - uint32_t level = 0x0000 0001
       - uint32_t tile_x = 0x0000 0001
       - uint32_t tile_y = 0x0000 0001
-      - uint32_t offset_soi = 0x0000 6733
-      - uint32_t length_soi = 0x0000 218e
+      - uint32_t soi_offset = 0x0000 6733
+      - uint32_t soi_length = 0x0000 218e
       - uint32_t x0 = 0x0000 0000 = 0
       - uint32_t y0 = 0x0000 0000 = 0
       - uint32_t x1 = 0x0000 01ff = 511
@@ -56,19 +66,19 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
       - uint32_t level = 0x0000 0001
       - uint32_t tile_x = 0x0000 0002
       - uint32_t tile_y = 0x0000 0001
-      - uint32_t offset_soi = 0x0000 88c1
-      - uint32_t length_soi = 0x0000 18e4
-      - uint32_t x0 = 0x0000 0200 = 512
+      - uint32_t soi_offset = 0x0000 88c1
+      - uint32_t soi_length = 0x0000 18e4
+      - uint32_t x0 = 0x0000 0200 = 512 // top-left
       - uint32_t y0 = 0x0000 0000 = 0
-      - uint32_t x1 = 0x0000 03ff = 1023
+      - uint32_t x1 = 0x0000 03ff = 1023 // bottom-right
       - uint32_t y1 = 0x0000 00ff = 255
     - at `0x000f89`: `0x0000a1a5`=SOI `0x00002794`=length
       - from `0x000f7d`
       - uint32_t level = 0x0000 0001
       - uint32_t tile_x = 0x0000 0001
       - uint32_t tile_y = 0x0000 0002
-      - uint32_t offset_soi = 0x0000 a1a5
-      - uint32_t length_soi = 0x0000 2794
+      - uint32_t soi_offset = 0x0000 a1a5
+      - uint32_t soi_length = 0x0000 2794
       - uint32_t x0 = 0x0000 0000 = 0
       - uint32_t y0 = 0x0000 0100 = 256
       - uint32_t x1 = 0x0000 01ff = 511
@@ -78,8 +88,8 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
       - uint32_t level = 0x0000 0001
       - uint32_t tile_x = 0x0000 0002
       - uint32_t tile_y = 0x0000 0002
-      - uint32_t offset_soi = 0x0000 c939
-      - uint32_t length_soi = 0x0000 1b23
+      - uint32_t soi_offset = 0x0000 c939
+      - uint32_t soi_length = 0x0000 1b23
       - uint32_t x0 = 0x0000 0200 = 512
       - uint32_t y0 = 0x0000 0100 = 256
       - uint32_t x1 = 0x0000 03ff = 1023
@@ -91,8 +101,8 @@ The minimum goal is to extract images from a given `qmp` file.  The stretch goal
       - uint32_t level = 0x0000 0002
       - uint32_t tile_x = 0x0000 0001
       - uint32_t tile_y = 0x0000 0001
-      - uint32_t offset_soi = 0x0000 e45c
-      - uint32_t length_soi = 0x0000 20b1
+      - uint32_t soi_offset = 0x0000 e45c
+      - uint32_t soi_length = 0x0000 20b1
       - uint32_t x0 = 0x0000 0000 = 0
       - uint32_t y0 = 0x0000 0000 = 0
       - uint32_t x1 = 0x0000 01ff = 511

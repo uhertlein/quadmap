@@ -1,4 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(quadmap)
 
-ADD_EXECUTABLE(qmpinfo qmpinfo.cpp)
+SET(CMAKE_CXX_STANDARD 11)
+ADD_EXECUTABLE(qmpinfo qmpinfo.cpp qmp.h)

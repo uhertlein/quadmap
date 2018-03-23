@@ -1,51 +1,63 @@
+/*
+ * Copyright (c)2018 Ulrich Hertlein <u.hertlein@sandbox.de>
+ */
+
 #pragma once
 
-#include <inttypes.h>
+#include <cinttypes>
 
-namespace qmp
-{
-struct QtMap
-{
-    union {
-        char space[0x9c4];
-    };
+namespace qmp {
+static const char* MARKER_QTMAP = "QTMAP";
+static const char* MARKER_QUADTREE = "QUADTREE";
+static const char* MARKER_TILESET = "TILESET ";
+
+#pragma pack(push, 1)
+struct QtMap {
+    char marker[5]; // 'QTMAP'
+    uint32_t version; // 0x0000 0002
+    uint32_t quadtree_offset; // 0x0000 09c6
+    char description[0x64];
+    char name[0x64];
+    char date0[0x14];
+    char date1[0x14];
+    uint8_t unk[0x28];
+    char copyright0[0x32];
+    char copyright1[0x64];
+    uint8_t unk_rem[0x80a];
 };
+static_assert(sizeof(QtMap) == 0x9c5, "Invalid QtMap size");
 
-struct QuadTree
-{
-    union {
-        char space[0x434];
-        struct {
-            char marker[8]; // 'QUADTREE'
-            uint32_t version;
-            uint32_t max_level;
-            uint32_t unk0; // 0x0000 2000
-            uint32_t unk1; // 0x0000 1000
-            uint32_t unk2; // 0x0000 2000
-            uint32_t unk3; // 0x0000 1000
-            uint32_t unk4; // 0x0000 0200
-            uint32_t unk5; // 0x0000 0100
-            uint32_t unk6; // 0x0
-            uint32_t unk7; // 0x0
-            uint32_t soi_preview_offset; // 0x0000 40aa
-        };
-    };
+struct QuadTree {
+    char marker[8]; // 'QUADTREE'
+    uint32_t version;
+    uint32_t max_level;
+    uint32_t unk0; // 0x0000 2000
+    uint32_t unk1; // 0x0000 1000
+    uint32_t unk2; // 0x0000 2000
+    uint32_t unk3; // 0x0000 1000
+    uint32_t unk4; // 0x0000 02
+    uint32_t unk5; // 0x0000
+    uint32_t unk6; // 0x0
+    uint32_t unk7; // 0x0
+    uint32_t soi_preview_offset; // 0x0000 40aa
+    uint8_t unk_rem[0x400];
 };
+static_assert(sizeof(QuadTree) == 0x434, "Invalid QuadTree size");
 
-struct TileSet
-{
+struct TileSet {
     char marker[8]; // 'TILESET '
     uint32_t version;
     uint32_t level;
+    uint8_t unk_rem[0x7c];
 };
+static_assert(sizeof(TileSet) == 0x8c, "Invalid TileSet size");
 
-struct Tile
-{
+struct Tile {
     uint32_t level;
     uint32_t tile_x;
     uint32_t tile_y;
 
-    // JFIF SOI offset+1, length
+    // JFIF SOI offset, length
     uint32_t soi_offset;
     uint32_t soi_length;
 
@@ -57,4 +69,7 @@ struct Tile
     uint32_t x1;
     uint32_t y1;
 };
+static_assert(sizeof(Tile) == 0x24, "Invalid Tile size");
+
+#pragma pack(pop)
 }
